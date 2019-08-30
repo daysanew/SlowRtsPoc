@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RTSGamePoc
 {
@@ -38,6 +39,7 @@ namespace RTSGamePoc
 
         private List<ILocation> GenerateRegion(Coordinate startBoundary)
         {
+            var locations = new List<ILocation>();
             var random = new Random();
             var regionSize = random.Next(_averageRegionSize, _averageRegionSize * 2);
             Coordinate endBoundary = new Coordinate
@@ -46,19 +48,41 @@ namespace RTSGamePoc
                 Y = startBoundary.Y + regionSize
             };
 
-            var castle = new Castle();
-            castle.coordinate.X = random.Next(startBoundary.X, endBoundary.X);
-            castle.coordinate.Y = random.Next(startBoundary.Y, endBoundary.Y);
+            var castle = new Castle
+            {
+                coordinate = new Coordinate
+                {
+                    X = random.Next(startBoundary.X, endBoundary.X),
+                    Y = random.Next(startBoundary.Y, endBoundary.Y)
+                }
+            };
 
+            locations.Add(castle);
             var numberOfTowns = random.Next(_averageNumberTowns / 2, _averageNumberTowns * 2);
-
-            var town = GenerateTown(startBoundary, endBoundary);
+            var townCount = 0;
+            while (townCount < numberOfTowns)
+            {
+                var town = GenerateTown(startBoundary, endBoundary);
+                if (!locations.Any(location => location.coordinate.X == town.coordinate.X && location.coordinate.Y == town.coordinate.Y))
+                {
+                    locations.Add(town);
+                    townCount++;
+                }
+            }
             return new List<ILocation>();
         }
 
         private Town GenerateTown(Coordinate startBoundary, Coordinate endBoundary)
         {
-            throw new NotImplementedException();
+            var random = new Random();
+            return new Town
+            {
+                coordinate = new Coordinate
+                {
+                    X = random.Next(startBoundary.X, endBoundary.X),
+                    Y = random.Next(startBoundary.Y, endBoundary.Y)
+                }
+            };
         }
     }
 
