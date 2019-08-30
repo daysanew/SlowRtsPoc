@@ -47,9 +47,18 @@ namespace RTSGamePoc
             };
 
             var castle = new Castle();
+            castle.coordinate.X = random.Next(startBoundary.X, endBoundary.X);
+            castle.coordinate.Y = random.Next(startBoundary.Y, endBoundary.Y);
 
             var numberOfTowns = random.Next(_averageNumberTowns / 2, _averageNumberTowns * 2);
+
+            var town = GenerateTown(startBoundary, endBoundary);
             return new List<ILocation>();
+        }
+
+        private Town GenerateTown(Coordinate startBoundary, Coordinate endBoundary)
+        {
+            throw new NotImplementedException();
         }
     }
 
