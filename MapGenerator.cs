@@ -11,7 +11,7 @@ namespace RTSGamePoc
         private int _numberOfPlayers;
         private readonly int _regions;
         private readonly int _averageNumberTowns = 4;
-        private readonly int _averageRegionSize = 20;
+        private readonly int _averageRegionSize = 10;
 
         public MapGenerator(int mapSize, int numberOfPlayers)
         {
@@ -19,7 +19,7 @@ namespace RTSGamePoc
             _numberOfPlayers = numberOfPlayers;
             _map = new int[mapSize, mapSize];
         }
-        private List<ILocation> GenerateLocations()
+        public char[,] GenerateLocations()
         {
             var random = new Random();
             var numberOfRegions = random.Next(_numberOfPlayers, _numberOfPlayers * 2);
@@ -29,12 +29,18 @@ namespace RTSGamePoc
                 Y = 0
             };
 
-            for (var i = 0; i == numberOfRegions; i++)
+            var regions = new List<ILocation>();
+            for (var i = 1; i <= numberOfRegions; i++)
             {
+                var towns = GenerateRegion(currentCoordinates);
 
+                currentCoordinates.X = towns.Select(town => town.coordinate.X).Max();
+                currentCoordinates.Y = towns.Select(town => town.coordinate.Y).Max();
+
+                regions.AddRange(towns);
             }
 
-            return new List<ILocation>();
+            return TurnRegionsIntoArray(regions);
         }
 
         private List<ILocation> GenerateRegion(Coordinate startBoundary)
@@ -65,11 +71,13 @@ namespace RTSGamePoc
                 var town = GenerateTown(startBoundary, endBoundary);
                 if (!locations.Any(location => location.coordinate.X == town.coordinate.X && location.coordinate.Y == town.coordinate.Y))
                 {
+                    locations.Last().location.Add(town);
+                    town.location.Add(locations.Last());
                     locations.Add(town);
                     townCount++;
                 }
             }
-            return new List<ILocation>();
+            return locations;
         }
 
         private Town GenerateTown(Coordinate startBoundary, Coordinate endBoundary)
@@ -84,29 +92,33 @@ namespace RTSGamePoc
                 }
             };
         }
-    }
 
-    public interface ILocation
-    {
-        Coordinate coordinate { get; set; }
-        List<ILocation> location { get; set; }
-    }
+        private char[,] TurnRegionsIntoArray(List<ILocation> locations)
+        {
+            var maxX = locations.Select(town => town.coordinate.X).Max() + 5;
+            var maxY = locations.Select(town => town.coordinate.Y).Max() + 5;
+            var map = new char[maxX, maxY];
+            for (var x = 0; x < maxX; x++)
+            {
+                for (var y = 0; y < maxY; y++)
+                {
+                    map[x, y] = '-';
+                }
+            }
 
-    public class Castle : ILocation
-    {
-        public Coordinate coordinate { get; set; }
-        public List<ILocation> location { get; set; }
-    }
+            locations.ForEach(location =>
+            {
+                if (location.GetType() == typeof(Castle))
+                {
+                    map[location.coordinate.X, location.coordinate.Y] = 'C';
+                }
+                else
+                {
+                    map[location.coordinate.X, location.coordinate.Y] = 'T';
+                }
+            });
 
-    public class Town : ILocation
-    {
-        public Coordinate coordinate { get; set; }
-        public List<ILocation> location { get; set; }
-    }
-
-    public class Coordinate
-    {
-        public int X { get; set; }
-        public int Y { get; set; }
+            return map;
+        }
     }
 }
