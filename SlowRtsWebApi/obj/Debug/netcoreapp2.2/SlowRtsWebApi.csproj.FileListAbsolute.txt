@@ -1,0 +1,14 @@
+C:\projects\SlowRtsPoc\SlowRtsWebApi\bin\Debug\netcoreapp2.2\SlowRtsWebApi.deps.json
+C:\projects\SlowRtsPoc\SlowRtsWebApi\bin\Debug\netcoreapp2.2\SlowRtsWebApi.runtimeconfig.json
+C:\projects\SlowRtsPoc\SlowRtsWebApi\bin\Debug\netcoreapp2.2\SlowRtsWebApi.runtimeconfig.dev.json
+c:\projects\SlowRtsPoc\SlowRtsWebApi\bin\Debug\netcoreapp2.2\SlowRtsWebApi.dll
+c:\projects\SlowRtsPoc\SlowRtsWebApi\bin\Debug\netcoreapp2.2\SlowRtsWebApi.pdb
+c:\projects\SlowRtsPoc\SlowRtsWebApi\obj\Debug\netcoreapp2.2\SlowRtsWebApi.csprojAssemblyReference.cache
+c:\projects\SlowRtsPoc\SlowRtsWebApi\obj\Debug\netcoreapp2.2\SlowRtsWebApi.csproj.CoreCompileInputs.cache
+c:\projects\SlowRtsPoc\SlowRtsWebApi\obj\Debug\netcoreapp2.2\SlowRtsWebApi.RazorAssemblyInfo.cache
+c:\projects\SlowRtsPoc\SlowRtsWebApi\obj\Debug\netcoreapp2.2\SlowRtsWebApi.RazorAssemblyInfo.cs
+c:\projects\SlowRtsPoc\SlowRtsWebApi\obj\Debug\netcoreapp2.2\SlowRtsWebApi.AssemblyInfoInputs.cache
+c:\projects\SlowRtsPoc\SlowRtsWebApi\obj\Debug\netcoreapp2.2\SlowRtsWebApi.AssemblyInfo.cs
+c:\projects\SlowRtsPoc\SlowRtsWebApi\obj\Debug\netcoreapp2.2\SlowRtsWebApi.RazorTargetAssemblyInfo.cache
+c:\projects\SlowRtsPoc\SlowRtsWebApi\obj\Debug\netcoreapp2.2\SlowRtsWebApi.dll
+c:\projects\SlowRtsPoc\SlowRtsWebApi\obj\Debug\netcoreapp2.2\SlowRtsWebApi.pdb

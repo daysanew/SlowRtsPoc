@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script src="scripts/two.js"></script>
+  </head>
+  <body>
+    <div id="game-area" style="border:1px solid #000000;"></div>
+    <div>Test</div>
+    <script>
+      fetch("http://localhost:5000/api/values")
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(locations) {
+          var maxX = Math.max.apply(
+            Math,
+            locations.map(function(o) {
+              return o.coordinate.x;
+            })
+          );
+          var maxY = Math.max.apply(
+            Math,
+            locations.map(function(o) {
+              return o.coordinate.y;
+            })
+          );
+          var elem = document.getElementById("game-area");
+          var two = new Two({
+            type: Two.Types.canvas,
+            //fullscreen: true,
+            width: 5000,
+            height: 5000,
+            autostart: true
+          }).appendTo(elem);
+
+          locations.map(function(location) {
+            if (location.type == "Castle") {
+              two.makePolygon(
+                location.coordinate.x * 15,
+                location.coordinate.y * 15,
+                5,
+                3
+              );
+
+              location.connectedLocations.map(function(connection) {
+                two.makeLine(
+                  location.coordinate.x * 15,
+                  location.coordinate.y * 15,
+                  connection.x * 15,
+                  connection.y * 15
+                );
+              });
+            }
+
+            if (location.type == "Town") {
+              two.makeCircle(
+                location.coordinate.x * 15,
+                location.coordinate.y * 15,
+                5
+              );
+            }
+          });
+        });
+    </script>
+  </body>
+</html>
