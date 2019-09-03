@@ -10,7 +10,8 @@ namespace RTSGamePoc
         private int[,] _map;
         private int _numberOfPlayers;
         private readonly int _averageNumberTowns = 4;
-        private readonly int _averageRegionSize = 10;
+        private readonly int _averageRegionSize = 250;
+        private readonly int _roadChance = 15;
 
         public MapGenerator(int mapSize, int numberOfPlayers)
         {
@@ -34,7 +35,6 @@ namespace RTSGamePoc
                 var towns = GenerateRegion(currentCoordinates);
 
                 currentCoordinates.X = towns.Select(town => town.coordinate.X).Max();
-                currentCoordinates.Y = towns.Select(town => town.coordinate.Y).Max();
 
                 regions.AddRange(towns);
             }
@@ -72,6 +72,21 @@ namespace RTSGamePoc
                 {
                     castle.location.Add(town);
                     town.location.Add(castle);
+
+                    locations.ForEach(location =>
+                    {
+                        if (location.GetType() != typeof(Castle))
+                        {
+                            var roadRoll = random.Next(1, 100);
+
+                            if (roadRoll <= _roadChance)
+                            {
+                                location.location.Add(town);
+                                town.location.Add(town);
+                            }
+                        }
+                    });
+
                     locations.Add(town);
                     townCount++;
                 }

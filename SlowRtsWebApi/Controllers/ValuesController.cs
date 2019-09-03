@@ -20,7 +20,7 @@ namespace SlowRtsWebApi.Controllers
 
         // // GET api/values/5
         [HttpGet]
-        public ActionResult<List<Location>> Get()
+        public ActionResult<GameResponse> Get()
         {
             var mapGen = new MapGenerator(5, 4);
 
@@ -40,7 +40,23 @@ namespace SlowRtsWebApi.Controllers
                 map.Add(mappedLocation);
             });
 
-            return map;
+            return new GameResponse
+            {
+
+                locations = map.ToList(),
+                generals = new List<General> {
+                    new General {
+                        location = new Coordinate{
+                            X = map.Last().coordinate.X,
+                            Y = map.Last().coordinate.Y
+                        },
+                        destination = new Coordinate{
+                            X = map.Last().connectedLocations.First().X,
+                            Y = map.Last().connectedLocations.First().Y
+                        }
+                    }
+                }
+            };
         }
 
         // POST api/values

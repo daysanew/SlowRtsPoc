@@ -6,60 +6,85 @@
   </head>
   <body>
     <div id="game-area" style="border:1px solid #000000;"></div>
-    <div>Test</div>
     <script>
       fetch("http://localhost:5000/api/values")
         .then(function(response) {
           return response.json();
         })
-        .then(function(locations) {
+        .then(function(gameResponse) {
           var maxX = Math.max.apply(
             Math,
-            locations.map(function(o) {
+            gameResponse.locations.map(function(o) {
               return o.coordinate.x;
             })
           );
           var maxY = Math.max.apply(
             Math,
-            locations.map(function(o) {
+            gameResponse.locations.map(function(o) {
               return o.coordinate.y;
             })
           );
+          var x1 = 0;
+          var x2 = maxX;
+          var y1 = 0;
+          var y2 = 0;
+          var width =
+            Math.sqrt((x1 + x2) * (x1 + x2) + (y1 + y2) * (y1 + y2)) + 2;
+          x2 = 0;
+          y2 = maxY;
+          var height =
+            Math.sqrt((x1 + x2) * (x1 + x2) + (y1 + y2) * (y1 + y2)) + 2;
+
           var elem = document.getElementById("game-area");
           var two = new Two({
             type: Two.Types.canvas,
-            //fullscreen: true,
-            width: 5000,
-            height: 5000,
+            width: width,
+            height: height,
             autostart: true
           }).appendTo(elem);
 
-          locations.map(function(location) {
+          gameResponse.locations.map(function(location) {
             if (location.type == "Castle") {
               two.makePolygon(
-                location.coordinate.x * 15,
-                location.coordinate.y * 15,
+                location.coordinate.x,
+                location.coordinate.y,
                 5,
                 3
               );
 
               location.connectedLocations.map(function(connection) {
                 two.makeLine(
-                  location.coordinate.x * 15,
-                  location.coordinate.y * 15,
-                  connection.x * 15,
-                  connection.y * 15
+                  location.coordinate.x,
+                  location.coordinate.y,
+                  connection.x,
+                  connection.y
                 );
               });
             }
 
             if (location.type == "Town") {
-              two.makeCircle(
-                location.coordinate.x * 15,
-                location.coordinate.y * 15,
-                5
-              );
+              two.makeCircle(location.coordinate.x, location.coordinate.y, 5);
+
+              location.connectedLocations.map(function(connection) {
+                two.makeLine(
+                  location.coordinate.x,
+                  location.coordinate.y,
+                  connection.x,
+                  connection.y
+                );
+              });
             }
+          });
+
+          gameResponse.generals.map(function(general) {
+            var text = new Two.Text(
+              "X",
+              general.location.x,
+              general.location.y
+            );
+            text.size = 16;
+            text.linewidth = 3;
+            two.add(text);
           });
         });
     </script>
